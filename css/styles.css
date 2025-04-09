@@ -4661,3 +4661,71 @@ img.u-pull-left {
         width  : var(--vspace-1_5);
     }
 }
+
+.dropdown {
+    position: relative;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .dropbtn {
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .dropbtn:hover {
+    color: #ff6600;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .dropdown-content li {
+    list-style: none;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dropdown-content li:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-content a {
+    display: block;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #333;
+    background: white;
+    transition: background 0.3s, color 0.3s;
+  }
+  
+  .dropdown-content a:hover {
+    background: linear-gradient(90deg, #ffcc70 0%, #ffb347 100%);
+    color: #fff;
+  }
+  
+  .dropdown.open .dropdown-content {
+    display: block;
+  }
+  
+  /* Animasi lembut bila dropdown muncul */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
