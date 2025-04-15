@@ -86,9 +86,9 @@
     }; // end ssMoveHeader
 
 
-   /* mobile menu
-    * ---------------------------------------------------- */ 
-    const ssMobileMenu = function() {
+      /* mobile menu
+    * ---------------------------------------------------- */
+      const ssMobileMenu = function() {
 
         const toggleButton = document.querySelector('.s-header__menu-toggle');
         const mainNavWrap = document.querySelector('.s-header__nav');
@@ -96,16 +96,32 @@
 
         if (!(toggleButton && mainNavWrap)) return;
 
+        // Listener for the main hamburger toggle button
         toggleButton.addEventListener('click', function(event) {
             event.preventDefault();
             toggleButton.classList.toggle('is-clicked');
             siteBody.classList.toggle('menu-is-open');
         });
 
+        // Listener for links inside the navigation panel
         mainNavWrap.querySelectorAll('.s-header__nav a').forEach(function(link) {
 
             link.addEventListener("click", function(event) {
 
+                // --- START OF MODIFICATION ---
+                // Check if the clicked link is the dropdown toggle button
+                if (event.target.classList.contains('dropbtn')) {
+                    // If it IS the dropdown button, do nothing here.
+                    // The inline toggleDropdown() function in the HTML will handle
+                    // opening/closing the dropdown itself. We don't want to close
+                    // the main mobile menu in this case.
+                    return; // Exit this event listener function early
+                }
+                // --- END OF MODIFICATION ---
+
+
+                // If it's NOT the dropdown button, proceed with the original logic:
+                // Close the menu when any *other* link is clicked (on mobile view).
                 // at 800px and below
                 if (window.matchMedia('(max-width: 800px)').matches) {
                     toggleButton.classList.toggle('is-clicked');
@@ -114,12 +130,17 @@
             });
         });
 
+        // Close menu on resize if window becomes wider than mobile breakpoint
         window.addEventListener('resize', function() {
-
             // above 800px
             if (window.matchMedia('(min-width: 801px)').matches) {
                 if (siteBody.classList.contains('menu-is-open')) siteBody.classList.remove('menu-is-open');
                 if (toggleButton.classList.contains('is-clicked')) toggleButton.classList.remove('is-clicked');
+
+                 // Also close any open dropdowns on resize to desktop view
+                 document.querySelectorAll('.dropdown.open').forEach(function(drop) {
+                     drop.classList.remove('open');
+                 });
             }
         });
 

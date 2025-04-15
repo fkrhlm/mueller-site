@@ -4665,9 +4665,9 @@ img.u-pull-left {
 .dropdown {
     position: relative;
     font-family: 'Segoe UI', sans-serif;
-  }
+}
   
-  .dropbtn {
+.dropbtn {
     padding: 10px 16px;
     background: none;
     border: none;
@@ -4676,13 +4676,13 @@ img.u-pull-left {
     color: #333;
     cursor: pointer;
     transition: color 0.3s ease;
-  }
+}
   
-  .dropbtn:hover {
+.dropbtn:hover {
     color: #ff6600;
-  }
+}
   
-  .dropdown-content {
+.dropdown-content {
     display: none;
     position: absolute;
     top: 100%;
@@ -4692,40 +4692,223 @@ img.u-pull-left {
     overflow: hidden;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
     min-width: 200px;
-    z-index: 1000;
+    z-index: 9999 !important;
     animation: fadeIn 0.3s ease-in-out;
-  }
+}
   
-  .dropdown-content li {
+.dropdown-content li {
     list-style: none;
     border-bottom: 1px solid #eee;
-  }
+}
   
-  .dropdown-content li:last-child {
+.dropdown-content li:last-child {
     border-bottom: none;
-  }
+}
   
-  .dropdown-content a {
+.dropdown-content a {
     display: block;
     padding: 12px 18px;
     text-decoration: none;
     color: #333;
     background: white;
     transition: background 0.3s, color 0.3s;
-  }
+}
   
-  .dropdown-content a:hover {
+.dropdown-content a:hover {
     background: linear-gradient(90deg, #ffcc70 0%, #ffb347 100%);
     color: #fff;
-  }
+}
   
-  .dropdown.open .dropdown-content {
+.dropdown.open .dropdown-content {
     display: block;
-  }
+}
   
-  /* Animasi lembut bila dropdown muncul */
-  @keyframes fadeIn {
+/* Animasi lembut bila dropdown muncul */
+@keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-  }
+}
   
+/* ===================================================================
+ * # Dropdown Menu Styles (Corrected for Mobile Consistency)
+ *
+ * ------------------------------------------------------------------- */
+
+/* --- Base Dropdown Styles (Mostly for Desktop) --- */
+.dropdown {
+    position: relative; /* Needed for absolute positioning of content */
+    /* font-family: 'Segoe UI', sans-serif; */ /* Let it inherit from header or body */
+}
+
+.dropbtn {
+    /* Base styles - these apply primarily to desktop or are overridden on mobile */
+    padding: 10px 16px; /* Adjust as needed for desktop alignment */
+    background: none;
+    border: none;
+    /* font-weight: 500; */ /* Inherit from .s-header__menu-links a */
+    /* font-size: 16px; */ /* Inherit from .s-header__menu-links a */
+    /* color: #333; */ /* This applies when header is NOT dark - adjust if needed */
+    cursor: pointer;
+    transition: color 0.3s ease;
+    /* Match header link color on dark bg */
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--font-2);
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: var(--vspace-1);
+    padding: 0 1.2rem;
+    display: block; /* Ensure consistency */
+}
+
+/* Hover for desktop/base */
+.dropbtn:hover,
+.dropbtn:focus {
+    /* color: #ff6600; */ /* Use theme color? Or white on dark? */
+    color: white; /* Match header link hover */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff; /* White background for desktop popout */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 9999 !important; /* Keep high z-index */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.dropdown-content li {
+    list-style: none;
+    border-bottom: 1px solid #eee; /* Separator for desktop */
+    margin: 0; /* Reset */
+    padding: 0; /* Reset */
+}
+
+.dropdown-content li:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #333; /* Dark text on white bg for desktop */
+    background: white; /* Explicit white bg */
+    transition: background 0.3s, color 0.3s;
+    /* Match link fonts from header for consistency */
+    font-family: var(--font-2);
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+/* Desktop hover effect */
+.dropdown-content a:hover,
+.dropdown-content a:focus {
+    /* background: linear-gradient(90deg, #ffcc70 0%, #ffb347 100%); */ /* Original gradient */
+    background: var(--color-1-light); /* Use theme color */
+    color: var(--color-black); /* Darker text on theme hover */
+}
+
+/* Show content when dropdown has .open class (Applies to both views) */
+.dropdown.open > .dropdown-content {
+    display: block;
+}
+
+/* Animation for desktop */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* --- Mobile Overrides (Aligning with Mobile Nav Style) --- */
+/* Using 800px to match when the mobile nav itself activates */
+@media (max-width: 800px) {
+
+    /* Style the Dropdown Button like other Mobile Nav Links */
+    .s-header__nav .dropdown .dropbtn {
+        /* Inherit most styles from .s-header__nav a in this breakpoint */
+        display: inline-block; /* Match other links */
+        font-family: var(--font-2); /* Match nav */
+        font-size: calc(var(--text-size) * 0.9444); /* Match nav */
+        line-height: 1; /* Match nav */
+        padding: var(--vspace-0_5) 0; /* Match nav padding */
+        color: rgba(255, 255, 255, 0.6); /* Match nav color */
+        background: none; /* Ensure no desktop bg */
+        border: none; /* Ensure no desktop border */
+        text-transform: none; /* Override button default if any */
+        letter-spacing: normal; /* Override button default if any */
+        height: auto; /* Override button default if any */
+        text-align: left; /* Align with other links */
+        width: auto; /* Allow natural width */
+        margin: 0; /* Reset margin */
+        transition: color 0.3s ease-in-out;
+    }
+
+    /* Hover/Focus for the button on mobile */
+    .s-header__nav .dropdown .dropbtn:hover,
+    .s-header__nav .dropdown .dropbtn:focus {
+         color: white; /* Match nav hover */
+         background: none; /* Ensure no background */
+    }
+
+    /* Style the Dropdown Content Area for Mobile */
+    .dropdown-content {
+        /* Positioning & Layout - Keep these overrides */
+        display: none !important; /* Hide initially */
+        position: static !important; /* Crucial: Flow within the mobile nav */
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        min-width: 100% !important;
+        width: 100% !important;
+        animation: none; /* Disable fade-in animation */
+
+        /* Styling to match mobile nav */
+        background-color: var(--color-gray-19); /* Match nav background */
+        margin-top: 5px; /* Add a little space below the button */
+        margin-bottom: 5px;
+        border: none; /* Remove potential desktop borders */
+        padding-left: 15px; /* Indent slightly */
+    }
+
+    /* Style the List Items within Mobile Dropdown */
+    .dropdown-content li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    }
+
+    .dropdown-content li:last-child {
+        border-bottom: none;
+    }
+
+    /* Style the Links within Mobile Dropdown */
+    .dropdown-content a {
+        /* Inherit/match mobile nav link styles */
+        display: block;
+        font-family: var(--font-2); /* Match nav */
+        font-size: calc(var(--text-size) * 0.9444); /* Match nav */
+        line-height: 1.2; /* Slightly adjust line height if needed */
+        color: rgba(255, 255, 255, 0.6); /* Match nav base color */
+        background: none; /* Explicitly remove desktop background */
+        padding: var(--vspace-0_5) 0; /* Match mobile nav link padding */
+        padding-left: 10px; /* Indent further */
+        text-decoration: none;
+        transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+
+    /* Hover/Focus for links within Mobile Dropdown */
+    .dropdown-content a:hover,
+    .dropdown-content a:focus {
+        color: white; /* Match nav link hover color */
+        background-color: rgba(255, 255, 255, 0.05); /* Subtle background highlight */
+    }
+
+    /* Explicitly show when open (redundant but safe) */
+    .dropdown.open > .dropdown-content {
+        display: block !important;
+    }
+}
+
