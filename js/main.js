@@ -402,7 +402,8 @@
         // portfolio lightbox
         const folioLightbox = function() {
 
-            const folioLinks = document.querySelectorAll('.brick .entry__link');
+            //const folioLinks = document.querySelectorAll('.brick .entry__link');
+            const folioLinks = document.querySelectorAll('.brick .entry__link, .card .entry__link');
             const modals = [];
     
             folioLinks.forEach(function(link) {

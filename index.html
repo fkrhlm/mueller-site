@@ -68,10 +68,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropbtn" onclick="toggleDropdown(event)">Category</a>
                             <ul class="dropdown-content" id="kategoriDropdown">
-                              <li><a href="Category.html">Kek</a></li>
-                              <li><a href="Category.html">Goodies</a></li>
-                              <li><a href="Category.html">Birthday Kek</a></li>
-                              <li><a href="Category.html">Kuih Raya</a></li>
+                              <li><a href="Kek.html">Kek</a></li>
+                              <li><a href="Kek.html">Goodies</a></li>
+                              <li><a href="Kek.html">Birthday Kek</a></li>
+                              <li><a href="Kek.html">Kuih Raya</a></li>
                             </ul>
                         </li>                          
                         <li><a href="#footer" class="smoothscroll">Contact</a></li>
@@ -91,7 +91,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="https://api.whatsapp.com/send?phone=%2B60196086607&context=AfdIf8IUUsz2gjwgkYtWRh_71DKxsHeE4rHjsN5eNhfLGX6D_n-XZVTKJMIhs3NNxrWAIOrPD2mlTJImQcBSkc_Rb0PyWumALYkjwlLoE7J05KuIixEqGeU3OZtLh9jy2QzrFMLoNk5vy00ritF5mkMdjw&source=FB_Page&app=facebook&entry_point=page_cta&fbclid=IwY2xjawJhooVleHRuA2FlbQIxMAABHqpFAM1kPEgLGptcj4hPzRtO_rhT0X6raAZzvHZn-8KACzTZCvS2Bsx_ILEk_aem_aREM34pP-hXQ1mZAKBT9SA">
+                            <a href="https://api.whatsapp.com/send?phone=60196086607&text=Hello%2C%20I%27m%20interested%20in%20your%20product.">
                                 <svg fill="#000000" width="64px" height="64px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128.00049,28A100.02594,100.02594,0,0,0,41.11475,177.53908l-9.0044,31.51661a11.99971,11.99971,0,0,0,14.835,14.834l31.5166-9.00391A100.00677,100.00677,0,1,0,128.00049,28Zm0,192a91.87082,91.87082,0,0,1-46.95264-12.86719,3.99494,3.99494,0,0,0-3.14355-.4082l-33.15723,9.47363a3.99979,3.99979,0,0,1-4.94434-4.94531l9.47266-33.15625a4.00111,4.00111,0,0,0-.4082-3.14355A92.01077,92.01077,0,1,1,128.00049,220Zm50.51123-73.457-20.45947-11.69141a12.01054,12.01054,0,0,0-12.12745.12891l-13.80664,8.28418a44.04183,44.04183,0,0,1-19.38232-19.38281l8.28369-13.80664a12.0108,12.0108,0,0,0,.12891-12.127l-11.69092-20.46A10.91584,10.91584,0,0,0,100,72a32.00811,32.00811,0,0,0-32,31.88086A84.001,84.001,0,0,0,151.999,188h.12012A32.00842,32.00842,0,0,0,184,156,10.913,10.913,0,0,0,178.51172,146.543ZM152.10791,180h-.1084A75.99972,75.99972,0,0,1,76,103.8926,23.997,23.997,0,0,1,100,80a2.89975,2.89975,0,0,1,2.51172,1.457L114.20264,101.918a4.00418,4.00418,0,0,1-.043,4.042l-9.38916,15.64844a3.9987,3.9987,0,0,0-.21826,3.69824,52.04112,52.04112,0,0,0,26.1416,26.1416,3.99707,3.99707,0,0,0,3.69873-.21875L150.04,141.84084a4.006,4.006,0,0,1,4.043-.04394l20.46045,11.69238A2.89712,2.89712,0,0,1,176,156,23.99725,23.99725,0,0,1,152.10791,180Z"></path> </g></svg>
                                 <span class="u-screen-reader-text">WhatsApp</span>
                             </a>
@@ -544,27 +544,27 @@
         </footer> <!-- end footer -->
 
 
-    <!-- Java Script
-    ================================================== -->
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        function toggleDropdown(event) {
-          event.preventDefault();
-          event.stopPropagation();
-      
-          const dropdown = event.target.closest('.dropdown');
-          dropdown.classList.toggle('open');
-        }
-      
-        document.addEventListener('click', function(event) {
-          document.querySelectorAll('.dropdown.open').forEach(function(drop) {
-            if (!drop.contains(event.target)) {
-              drop.classList.remove('open');
+        <!-- Java Script
+        ================================================== -->
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            function toggleDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        
+            const dropdown = event.target.closest('.dropdown');
+            dropdown.classList.toggle('open');
             }
-          });
-        });
-      </script>
+        
+            document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown.open').forEach(function(drop) {
+                if (!drop.contains(event.target)) {
+                drop.classList.remove('open');
+                }
+            });
+            });
+        </script>
       
 
 </body>
