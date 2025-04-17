@@ -513,7 +513,8 @@
             }
         }
 
-        const triggers = document.querySelectorAll('.smoothscroll');
+        // Select only links with class smoothscroll AND href starting with #
+        const triggers = document.querySelectorAll('.smoothscroll[href^="#"]');
         
         const moveTo = new MoveTo({
             tolerance: 0,

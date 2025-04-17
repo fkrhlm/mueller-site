@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" >
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mamafiekitchen - Shopping Cart</title>
+
+    <script>
+        document.documentElement.classList.remove('no-js');
+        document.documentElement.classList.add('js');
+    </script>
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="mamafie_logo_32x32.jpg">
+    <link rel="icon" type="image/png" sizes="16x16" href="mamafie_logo_16x16.jpg">
+    <link rel="manifest" href="site.webmanifest">
+
+    <style>
+        /* Styles specific to the Cart page content */
+        .content-wrap {
+          padding-top: 120px;
+          padding-bottom: 80px;
+          flex-grow: 1;
+          /* --- UBAH INI --- */
+          background-color: var(--color-gray-19); /* Latar belakang gelap */
+        }
+        .container {
+          max-width: 960px;
+          margin: 40px auto;
+          padding: 0 20px;
+        }
+        h2.cart-title {
+          margin-bottom: 40px;
+          text-align: center;
+          font-size: 2.2em;
+          /* --- UBAH INI --- */
+          color: var(--color-white); /* Judul putih */
+        }
+        #cart-items-container {
+             /* Hapus border jika tidak diinginkan di latar gelap, atau ubah warnanya */
+             border-top: 1px solid var(--color-gray-17); /* Border abu-abu lebih gelap */
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+             /* Hapus border jika tidak diinginkan di latar gelap, atau ubah warnanya */
+            border-bottom: 1px solid var(--color-gray-17); /* Border abu-abu lebih gelap */
+            gap: 20px;
+        }
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .cart-item-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .cart-item-details h4 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            /* --- UBAH INI --- */
+            color: var(--color-white); /* Nama item putih */
+        }
+        .cart-item-details .price {
+            font-size: 1em;
+            /* --- UBAH INI --- */
+            color: var(--color-gray-11); /* Harga abu-abu terang */
+            margin-bottom: 5px;
+        }
+         .cart-item-details .quantity {
+             font-size: 0.9em;
+             /* --- UBAH INI --- */
+             color: var(--color-gray-13); /* Kuantitas abu-abu sedikit lebih gelap */
+         }
+        .cart-empty-message {
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 1.2em;
+            /* --- UBAH INI --- */
+            color: var(--color-gray-11); /* Pesan abu-abu terang */
+        }
+
+        /* Footer padding override */
+         #cart-page .s-footer {
+           padding-top: var(--vspace-1_5); /* 48px */
+         }
+
+        html { height: 100%; }
+        body { min-height: 100%; }
+
+        /* Pastikan link header terlihat di latar belakang gelap jika header tidak sticky */
+         .s-header:not(.sticky) .s-header__menu-links a,
+         .s-header:not(.sticky) .s-header__social svg path {
+           /* Atur ke putih jika header default transparan di atas latar gelap */
+           color: rgba(255, 255, 255, 0.6);
+           fill: white;
+         }
+         .s-header:not(.sticky) .s-header__menu-links .current a {
+             color: white;
+         }
+         /* Style untuk tombol hitung cart di header (tidak berubah) */
+         #view-cart-button { position: relative; }
+         #cart-item-count { /* Styling opsional */ }
+
+         #cart-page .s-header__nav .dropdown-content a {
+            color: var(--color-text-dark); /* Gunakan variabel tema untuk hitam */
+            background-color: white; /* Pastikan latar belakang tetap putih */
+        }
+        /* Pastikan hover style tetap berfungsi */
+        #cart-page .s-header__nav .dropdown-content a:hover {
+           /* Biarkan style hover dari styles.css yang berlaku,
+              atau definisikan ulang di sini jika perlu */
+           background: var(--color-1-light); /* Contoh: Gunakan warna tema */
+           color: var(--color-text-dark);
+        }
+
+        /* --- TAMBAHKAN STYLE INI --- */
+        .remove-item-button {
+            background-color: #dc3545; /* Warna merah untuk hapus */
+            color: white;
+            border: none;
+            padding: 5px 10px; /* Padding lebih kecil */
+            font-size: 0.8em;  /* Font lebih kecil */
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-left: auto; /* Dorong tombol ke kanan dalam flex container */
+            flex-shrink: 0; /* Jangan biarkan tombol menyusut */
+        }
+        .remove-item-button:hover {
+            background-color: #c82333; /* Merah lebih gelap saat hover */
+        }
+        /* --- AKHIR STYLE TAMBAHAN --- */
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--color-gray-17);
+            gap: 15px; /* Sedikit kurangi gap jika perlu */
+        }
+         /* Pastikan detail item tidak terlalu lebar */
+        .cart-item-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-right: 10px; /* Beri sedikit ruang sebelum tombol hapus */
+        }
+
+
+    </style>
+
+</head>
+
+<body id="top"> <!-- Consider adding id="cart-page" here -->
+
+    <!-- preloader -->
+    <div id="preloader"><div id="loader"></div></div>
+
+    <!-- page wrap -->
+    <div id="cart-page" class="s-pagewrap"> <!-- Added id="cart-page" -->
+
+        <!-- Header (Copied from Kek.html, Cart button will link here) -->
+        <header class="s-header">
+            <div class="row s-header__inner">
+                 <div class="s-header__block">
+                     <div class="s-header__logo">
+                         <a class="logo" href="index.html"><img src="images/mamafie_logo.jpeg" alt="Homepage"></a>
+                     </div>
+                     <a class="s-header__menu-toggle" href="#0"><span>Menu</span></a>
+                 </div>
+                 <nav class="s-header__nav">
+                     <ul class="s-header__menu-links">
+                         <li><a href="index.html#intro" class="smoothscroll">Intro</a></li>
+                         <li><a href="index.html#about" class="smoothscroll">About</a></li>
+                         <li><a href="index.html#folio" class="smoothscroll">Work</a></li>
+                         <li class="dropdown">
+                             <a href="#" class="dropbtn" onclick="toggleDropdown(event)">Category</a>
+                             <ul class="dropdown-content" id="kategoriDropdown">
+                               <li><a href="cake.html">Kek</a></li>
+                               <li><a href="goodies.html">Goodies</a></li>
+                               <li><a href="goodies.html">Birthday Kek</a></li>
+                               <li><a href="goodies.html">Kuih Raya</a></li>
+                             </ul>
+                         </li>
+                         <li><a href="index.html#footer" class="smoothscroll">Contact</a></li>
+                     </ul>
+                     <ul class="s-header__social">
+                         <!-- Social Icons -->
+                         <li><a href="https://www.facebook.com/profile.php?id=100064799558073"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:rgba(0, 0, 0, 1);transform:;-ms-filter:"><path d="M20,3H4C3.447,3,3,3.448,3,4v16c0,0.552,0.447,1,1,1h8.615v-6.96h-2.338v-2.725h2.338v-2c0-2.325,1.42-3.592,3.5-3.592 c0.699-0.002,1.399,0.034,2.095,0.107v2.42h-1.435c-1.128,0-1.348,0.538-1.348,1.325v1.735h2.697l-0.35,2.725h-2.348V21H20 c0.553,0,1-0.448,1-1V4C21,3.448,20.553,3,20,3z"></path></svg><span class="u-screen-reader-text">Facebook</span></a></li>
+                         <li><a href="https://www.instagram.com/mamafiekitchen/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:rgba(0, 0, 0, 1);transform:;-ms-filter:"><path d="M11.999,7.377c-2.554,0-4.623,2.07-4.623,4.623c0,2.554,2.069,4.624,4.623,4.624c2.552,0,4.623-2.07,4.623-4.624 C16.622,9.447,14.551,7.377,11.999,7.377L11.999,7.377z M11.999,15.004c-1.659,0-3.004-1.345-3.004-3.003 c0-1.659,1.345-3.003,3.004-3.003s3.002,1.344,3.002,3.003C15.001,13.659,13.658,15.004,11.999,15.004L11.999,15.004z"></path><circle cx="16.806" cy="7.207" r="1.078"></circle><path d="M20.533,6.111c-0.469-1.209-1.424-2.165-2.633-2.632c-0.699-0.263-1.438-0.404-2.186-0.42 c-0.963-0.042-1.268-0.054-3.71-0.054s-2.755,0-3.71,0.054C7.548,3.074,6.809,3.215,6.11,3.479C4.9,3.946,3.945,4.902,3.477,6.111 c-0.263,0.7-0.404,1.438-0.419,2.186c-0.043,0.962-0.056,1.267-0.056,3.71c0,2.442,0,2.753,0.056,3.71 c0.015,0.748,0.156,1.486,0.419,2.187c0.469,1.208,1.424,2.164,2.634,2.632c0.696,0.272,1.435,0.426,2.185,0.45 c0.963,0.042,1.268,0.055,3.71,0.055s2.755,0,3.71-0.055c0.747-0.015,1.486-0.157,2.186-0.419c1.209-0.469,2.164-1.424,2.633-2.633 c0.263-0.7,0.404-1.438,0.419,2.186c0.043-0.962,0.056-1.267-0.056-3.71s0-2.753-0.056-3.71C20.941,7.57,20.801,6.819,20.533,6.111z M19.315,15.643c-0.007,0.576-0.111,1.147-0.311,1.688c-0.305,0.787-0.926,1.409-1.712,1.711c-0.535,0.199-1.099,0.303-1.67,0.311 c-0.95,0.044-1.218,0.055-3.654,0.055c-2.438,0-2.687,0-3.655-0.055c-0.569-0.007-1.135-0.112-1.669-0.311 c-0.789-0.301-1.414-0.923-1.719-1.711c-0.196-0.534-0.302-1.099-0.311-1.669c-0.043-0.95-0.053-1.218-0.053-3.654 c0-2.437,0-2.686,0.053-3.655c0.007-0.576,0.111-1.146,0.311-1.687c0.305-0.789,0.93-1.41,1.719-1.712 c0.534-0.198,1.1-0.303,1.669-0.311c0.951-0.043,1.218-0.055,3.655-0.055c2.437,0,2.687,0,3.654,0.055 c0.571,0.007,1.135,0.112,1.67,0.311c0.786,0.303,1.407,0.925,1.712,1.712c0.196,0.534,0.302,1.099,0.311,1.669 c0.043,0.951,0.054,1.218,0.054,3.655c0,2.436,0,2.698-0.043,3.654H19.315z"></path></svg><span class="u-screen-reader-text">Instagram</span></a></li>
+                         <li><a href="https://api.whatsapp.com/send?phone=60196086607&text=Hello%2C%20I%27m%20interested%20in%20your%20product."><svg fill="#000000" width="24px" height="24px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128.00049,28A100.02594,100.02594,0,0,0,41.11475,177.53908l-9.0044,31.51661a11.99971,11.99971,0,0,0,14.835,14.834l31.5166-9.00391A100.00677,100.00677,0,1,0,128.00049,28Zm0,192a91.87082,91.87082,0,0,1-46.95264-12.86719,3.99494,3.99494,0,0,0-3.14355-.4082l-33.15723,9.47363a3.99979,3.99979,0,0,1-4.94434-4.94531l9.47266-33.15625a4.00111,4.00111,0,0,0-.4082-3.14355A92.01077,92.01077,0,1,1,128.00049,220Zm50.51123-73.457-20.45947-11.69141a12.01054,12.01054,0,0,0-12.12745.12891l-13.80664,8.28418a44.04183,44.04183,0,0,1-19.38232-19.38281l8.28369-13.80664a12.0108,12.0108,0,0,0,.12891-12.127l-11.69092-20.46A10.91584,10.91584,0,0,0,100,72a32.00811,32.00811,0,0,0-32,31.88086A84.001,84.001,0,0,0,151.999,188h.12012A32.00842,32.00842,0,0,0,184,156,10.913,10.913,0,0,0,178.51172,146.543ZM152.10791,180h-.1084A75.99972,75.99972,0,0,1,76,103.8926,23.997,23.997,0,0,1,100,80a2.89975,2.89975,0,0,1,2.51172,1.457L114.20264,101.918a4.00418,4.00418,0,0,1-.043,4.042l-9.38916,15.64844a3.9987,3.9987,0,0,0-.21826,3.69824,52.04112,52.04112,0,0,0,26.1416,26.1416,3.99707,3.99707,0,0,0,3.69873-.21875L150.04,141.84084a4.006,4.006,0,0,1,4.043-.04394l20.46045,11.69238A2.89712,2.89712,0,0,1,176,156,23.99725,23.99725,0,0,1,152.10791,180Z"></path> </g></svg><span class="u-screen-reader-text">WhatsApp</span></a></li>
+                         <li><a href="cart.html"><svg fill="#000000" width="24px" height="24px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128.00049,28A100.02594,100.02594,0,0,0,41.11475,177.53908l-9.0044,31.51661a11.99971,11.99971,0,0,0,14.835,14.834l31.5166-9.00391A100.00677,100.00677,0,1,0,128.00049,28Zm0,192a91.87082,91.87082,0,0,1-46.95264-12.86719,3.99494,3.99494,0,0,0-3.14355-.4082l-33.15723,9.47363a3.99979,3.99979,0,0,1-4.94434-4.94531l9.47266-33.15625a4.00111,4.00111,0,0,0-.4082-3.14355A92.01077,92.01077,0,1,1,128.00049,220Zm50.51123-73.457-20.45947-11.69141a12.01054,12.01054,0,0,0-12.12745.12891l-13.80664,8.28418a44.04183,44.04183,0,0,1-19.38232-19.38281l8.28369-13.80664a12.0108,12.0108,0,0,0,.12891-12.127l-11.69092-20.46A10.91584,10.91584,0,0,0,100,72a32.00811,32.00811,0,0,0-32,31.88086A84.001,84.001,0,0,0,151.999,188h.12012A32.00842,32.00842,0,0,0,184,156,10.913,10.913,0,0,0,178.51172,146.543ZM152.10791,180h-.1084A75.99972,75.99972,0,0,1,76,103.8926,23.997,23.997,0,0,1,100,80a2.89975,2.89975,0,0,1,2.51172,1.457L114.20264,101.918a4.00418,4.00418,0,0,1-.043,4.042l-9.38916,15.64844a3.9987,3.9987,0,0,0-.21826,3.69824,52.04112,52.04112,0,0,0,26.1416,26.1416,3.99707,3.99707,0,0,0,3.69873-.21875L150.04,141.84084a4.006,4.006,0,0,1,4.043-.04394l20.46045,11.69238A2.89712,2.89712,0,0,1,176,156,23.99725,23.99725,0,0,1,152.10791,180Z"></path> </g></svg><span class="u-screen-reader-text">WhatsApp</span></a></li>
+                        </ul>
+                 </nav>
+            </div>
+        </header> <!-- end s-header -->
+
+        <!-- # site-content -->
+        <div class="content-wrap">
+            <div class="container">
+              <h2 class="cart-title">Your Shopping Cart</h2>
+
+              <!-- Container where cart items will be dynamically added -->
+              <div id="cart-items-container">
+                  <!-- Items will be injected here by JavaScript -->
+                  <!-- Example of structure for one item (generated by JS):
+                  <div class="cart-item">
+                      <img src="images/folio/brown_marble_cake.jpg" alt="Brown Marble Cake">
+                      <div class="cart-item-details">
+                           <h4>Brown Marble Cake</h4>
+                           <span class="price">$280.00</span>
+                           <span class="quantity">Quantity: 1</span>
+                      </div>
+                  </div>
+                  -->
+              </div>
+
+              <!-- Placeholder for totals, checkout button etc. (Can be added later) -->
+              <!-- <div id="cart-summary">
+                    <h4>Total: $<span id="cart-total">0.00</span></h4>
+                    <button>Proceed to Checkout</button>
+              </div> -->
+
+            </div> <!-- End .container -->
+        </div> <!-- End .content-wrap -->
+
+        <!-- Footer (Copied from Kek.html) -->
+        <footer id="footer" class="s-footer target-section">
+             <div class="row s-footer__bottom">
+                 <div class="column lg-6 tab-12 s-footer__bottom-left">
+                     <ul class="s-footer__social">
+                          <!-- Social Icons -->
+                         <li><a href="https://www.facebook.com/profile.php?id=100064799558073"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:rgba(0, 0, 0, 1);transform:;-ms-filter:"><path d="M20,3H4C3.447,3,3,3.448,3,4v16c0,0.552,0.447,1,1,1h8.615v-6.96h-2.338v-2.725h2.338v-2c0-2.325,1.42-3.592,3.5-3.592 c0.699-0.002,1.399,0.034,2.095,0.107v2.42h-1.435c-1.128,0-1.348,0.538-1.348,1.325v1.735h2.697l-0.35,2.725h-2.348V21H20 c0.553,0,1-0.448,1-1V4C21,3.448,20.553,3,20,3z"></path></svg><span class="u-screen-reader-text">Facebook</span></a></li>
+                         <li><a href="https://www.instagram.com/mamafiekitchen/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:rgba(0, 0, 0, 1);transform:;-ms-filter:"><path d="M11.999,7.377c-2.554,0-4.623,2.07-4.623,4.623c0,2.554,2.069,4.624,4.623,4.624c2.552,0,4.623-2.07,4.623-4.624 C16.622,9.447,14.551,7.377,11.999,7.377L11.999,7.377z M11.999,15.004c-1.659,0-3.004-1.345-3.004-3.003 c0-1.659,1.345-3.003,3.004-3.003s3.002,1.344,3.002,3.003C15.001,13.659,13.658,15.004,11.999,15.004L11.999,15.004z"></path><circle cx="16.806" cy="7.207" r="1.078"></circle><path d="M20.533,6.111c-0.469-1.209-1.424-2.165-2.633-2.632c-0.699-0.263-1.438-0.404-2.186-0.42 c-0.963-0.042-1.268-0.054-3.71-0.054s-2.755,0-3.71,0.054C7.548,3.074,6.809,3.215,6.11,3.479C4.9,3.946,3.945,4.902,3.477,6.111 c-0.263,0.7-0.404,1.438-0.419,2.186c-0.043,0.962-0.056,1.267-0.056,3.71c0,2.442,0,2.753,0.056,3.71 c0.015,0.748,0.156,1.486,0.419,2.187c0.469,1.208,1.424,2.164,2.634,2.632c0.696,0.272,1.435,0.426,2.185,0.45 c0.963,0.042,1.268,0.055,3.71,0.055s2.755,0,3.71-0.055c0.747-0.015,1.486-0.157,2.186-0.419c1.209-0.469,2.164-1.424,2.633-2.633 c0.263-0.7,0.404-1.438,0.419-2.186c0.043-0.962,0.056-1.267-0.056-3.71s0-2.753-0.056-3.71C20.941,7.57,20.801,6.819,20.533,6.111z M19.315,15.643c-0.007,0.576-0.111,1.147-0.311,1.688c-0.305,0.787-0.926,1.409-1.712,1.711c-0.535,0.199-1.099,0.303-1.67,0.311 c-0.95,0.044-1.218,0.055-3.654,0.055c-2.438,0-2.687,0-3.655-0.055c-0.569-0.007-1.135-0.112-1.669-0.311 c-0.789-0.301-1.414-0.923-1.719-1.711c-0.196-0.534-0.302-1.099-0.311-1.669c-0.043-0.95-0.053-1.218-0.053-3.654 c0-2.437,0-2.686,0.053-3.655c0.007-0.576,0.111-1.146,0.311-1.687c0.305-0.789,0.93-1.41,1.719-1.712 c0.534-0.198,1.1-0.303,1.669-0.311c0.951-0.043,1.218-0.055,3.655-0.055c2.437,0,2.687,0,3.654,0.055 c0.571,0.007,1.135,0.112,1.67,0.311c0.786,0.303,1.407,0.925,1.712,1.712c0.196,0.534,0.302,1.099,0.311,1.669 c0.043,0.951,0.054,1.218,0.054,3.655c0,2.436,0,2.698-0.043,3.654H19.315z"></path></svg><span class="u-screen-reader-text">Instagram</span></a></li>
+                         <li><a href="https://api.whatsapp.com/send?phone=60196086607&text=Hello%2C%20I%27m%20interested%20in%20your%20product."><svg fill="#000000" width="24px" height="24px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M128.00049,28A100.02594,100.02594,0,0,0,41.11475,177.53908l-9.0044,31.51661a11.99971,11.99971,0,0,0,14.835,14.834l31.5166-9.00391A100.00677,100.00677,0,1,0,128.00049,28Zm0,192a91.87082,91.87082,0,0,1-46.95264-12.86719,3.99494,3.99494,0,0,0-3.14355-.4082l-33.15723,9.47363a3.99979,3.99979,0,0,1-4.94434-4.94531l9.47266-33.15625a4.00111,4.00111,0,0,0-.4082-3.14355A92.01077,92.01077,0,1,1,128.00049,220Zm50.51123-73.457-20.45947-11.69141a12.01054,12.01054,0,0,0-12.12745.12891l-13.80664,8.28418a44.04183,44.04183,0,0,1-19.38232-19.38281l8.28369-13.80664a12.0108,12.0108,0,0,0,.12891-12.127l-11.69092-20.46A10.91584,10.91584,0,0,0,100,72a32.00811,32.00811,0,0,0-32,31.88086A84.001,84.001,0,0,0,151.999,188h.12012A32.00842,32.00842,0,0,0,184,156,10.913,10.913,0,0,0,178.51172,146.543ZM152.10791,180h-.1084A75.99972,75.99972,0,0,1,76,103.8926,23.997,23.997,0,0,1,100,80a2.89975,2.89975,0,0,1,2.51172,1.457L114.20264,101.918a4.00418,4.00418,0,0,1-.043,4.042l-9.38916,15.64844a3.9987,3.9987,0,0,0-.21826,3.69824,52.04112,52.04112,0,0,0,26.1416,26.1416,3.99707,3.99707,0,0,0,3.69873-.21875L150.04,141.84084a4.006,4.006,0,0,1,4.043-.04394l20.46045,11.69238A2.89712,2.89712,0,0,1,176,156,23.99725,23.99725,0,0,1,152.10791,180Z"></path> </g></svg><span class="u-screen-reader-text">WhatsApp</span></a></li>
+                     </ul>
+                 </div>
+                 <div class="column lg-6 tab-12 s-footer__bottom-right">
+                     <div class="ss-copyright">
+                         <span>© Copyright Mamafiekitchen 2024</span>
+                         <span>Design by <a href="https://www.styleshout.com/">StyleShout</a></span>
+                     </div>
+                 </div>
+            </div>
+            <div class="ss-go-top">
+                <a class="smoothscroll" title="Back to Top" href="#top"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M6 4h12v2H6zm5 10v6h2v-6h5l-6-6-6 6z"></path></svg></a>
+            </div>
+        </footer> <!-- end footer -->
+
+    </div> <!-- end page-wrap -->
+
+    <!-- Java Script -->
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Dropdown Toggle (copied from Kek.html)
+        function toggleDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = event.target.closest('.dropdown');
+            dropdown.classList.toggle('open');
+        }
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown.open').forEach(function(drop) {
+                if (!drop.contains(event.target)) {
+                    drop.classList.remove('open');
+                }
+            });
+        });
+
+        // Cart Display & Header Count Update (Cart Page)
+        // ==================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartContainer = document.getElementById('cart-items-container');
+            const cartCountElement = document.getElementById('cart-item-count');
+            const cartStorageKey = 'mamafieShoppingCart';
+
+            function getCart() {
+                try {
+                    const cartString = localStorage.getItem(cartStorageKey);
+                    return cartString ? JSON.parse(cartString) : [];
+                } catch (e) {
+                    console.error("Error reading cart from localStorage:", e);
+                    return [];
+                }
+            }
+
+            function saveCart(cart) { // Fungsi saveCart ditambahkan di sini
+                 try {
+                     localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+                 } catch (e) {
+                     console.error("Error saving cart to localStorage:", e);
+                     alert('Could not save updated cart. Storage might be full.');
+                 }
+             }
+
+
+             function updateCartCount() {
+                const cart = getCart();
+                const count = cart.length;
+                if (cartCountElement) {
+                    cartCountElement.textContent = count;
+                }
+            }
+
+            // *** FUNGSI BARU UNTUK MENGHAPUS ITEM ***
+            function removeItemFromCart(productIdToRemove) {
+                let cart = getCart();
+                // Buat array baru yang berisi semua item KECUALI item yang ingin dihapus
+                const updatedCart = cart.filter(item => item.id !== productIdToRemove);
+                saveCart(updatedCart); // Simpan array yang sudah diperbarui
+                console.log(`Item ${productIdToRemove} removed.`);
+            }
+            // *****************************************
+
+            function displayCartItems() {
+                const cart = getCart();
+                cartContainer.innerHTML = '';
+
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = '<p class="cart-empty-message">Your shopping cart is empty.</p>';
+                    return;
+                }
+
+                cart.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('cart-item');
+                    // Sanitasi teks sebelum dimasukkan
+                    const safeName = document.createElement('h4');
+                    safeName.textContent = item.name || 'Unknown Item';
+                    const safePrice = document.createElement('span');
+                    safePrice.classList.add('price');
+                    safePrice.textContent = item.price || '$0.00';
+                    const safeQuantity = document.createElement('span');
+                    safeQuantity.classList.add('quantity');
+                    safeQuantity.textContent = `Quantity: ${item.quantity || 1}`;
+
+                    // *** TAMBAHKAN TOMBOL HAPUS DI SINI ***
+                    itemElement.innerHTML = `
+                        <img src="${item.image || 'images/placeholder.png'}" alt="${safeName.textContent}">
+                        <div class="cart-item-details">
+                            ${safeName.outerHTML}
+                            ${safePrice.outerHTML}
+                            ${safeQuantity.outerHTML}
+                        </div>
+                        <button type="button" class="remove-item-button" data-product-id="${item.id || ''}">Remove</button>
+                    `;
+                    // ***************************************
+                    cartContainer.appendChild(itemElement);
+                });
+            }
+
+            // *** TAMBAHKAN EVENT LISTENER UNTUK TOMBOL HAPUS (Event Delegation) ***
+            cartContainer.addEventListener('click', (event) => {
+                // Cek apakah elemen yang diklik adalah tombol hapus
+                if (event.target.classList.contains('remove-item-button')) {
+                    const button = event.target;
+                    const productId = button.dataset.productId; // Ambil ID dari atribut data-*
+
+                    if (productId) {
+                         // Opsional: Minta konfirmasi
+                         if (confirm(`Are you sure you want to remove this item?`)) {
+                             removeItemFromCart(productId);
+                             // Gambar ulang daftar keranjang setelah menghapus
+                             displayCartItems();
+                             // Perbarui hitungan di header
+                             updateCartCount();
+                         }
+                    } else {
+                        console.error('Remove button clicked, but no product ID found.');
+                    }
+                }
+            });
+            // ************************************************************************
+
+
+            // Tampilan awal dan update hitungan saat halaman keranjang dimuat
+            displayCartItems();
+            updateCartCount();
+        });
+
+
+    </script>
+
+</body>
+</html>

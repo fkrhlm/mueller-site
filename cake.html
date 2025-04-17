@@ -28,8 +28,12 @@
     <style>
         /* Styles specific to the Category page content (grid, cards, button) */
         /* Keep these separate or merge into your main CSS */
-        body.category-page { /* Add a class to body for specificity */
-          background-color: #f8f8f8; /* Override if styles.css sets a different body bg */
+        .content-wrap { /* Target the main content wrapper */
+          padding-top: 100px;
+          padding-bottom: 80px;
+          flex-grow: 1;
+          /* --- ADD THIS --- */
+          background-color: var(--color-gray-19); /* Set dark background */
         }
         .content-wrap { /* Added wrapper for content */
           padding-top: 100px; /* START ADJUST: Match potential header height + margin */
@@ -89,6 +93,17 @@
           display: block;
         }
 
+        /* --- ADD THIS RULE for the WhatsApp Icon --- */
+        .whatsapp-icon {
+          width: 12px;         /* Adjust size as needed */
+          height: 12px;        /* Adjust size as needed */
+          margin-right: 6px;   /* Space between icon and text */
+          vertical-align: middle; /* Helps align with text if flexbox isn't perfect */
+          /* The button uses inline-flex with align-items: center,
+             so vertical-align might not be strictly necessary but doesn't hurt */
+        }
+        /* --- END of added rule --- */
+
         /* --- Button Container --- */
         .card-actions {
           display: flex;
@@ -138,13 +153,12 @@
           background-color: #1DAE54; /* Darker Green */
           border-color: #1DAE54;
         }
-        .whatsapp-icon { /* Kept if you add icons later */
-          width: 16px;
-          height: 16px;
-          margin-right: 6px;
-          vertical-align: middle;
-        }
         /* --- End Button Styles --- */
+
+        #kek-page .s-footer {
+           padding-top: var(--vspace-0_75); /* Adjust this value as needed (e.g., 80px) */
+        }
+        /* --- END OF ADDED RULE --- */
 
         /* --- Basic Sticky Footer Setup --- */
         html {
@@ -156,6 +170,7 @@
             min-height: 100%;
         }
         /* --- End Sticky Footer Setup --- */
+        
 
       </style>
 
@@ -204,10 +219,10 @@
                              <a href="#" class="dropbtn" onclick="toggleDropdown(event)">Category</a>
                              <ul class="dropdown-content" id="kategoriDropdown">
                                <!-- Links to Kek.html (itself) or other category pages -->
-                               <li><a href="Kek.html">Kek</a></li>
-                               <li><a href="Kek.html">Goodies</a></li>
-                               <li><a href="Kek.html">Birthday Kek</a></li>
-                               <li><a href="Kek.html">Kuih Raya</a></li>
+                               <li><a href="cake.html">Kek</a></li>
+                               <li><a href="goodies.html">Goodies</a></li>
+                               <li><a href="cake.html">Birthday Kek</a></li>
+                               <li><a href="cake.html">Kuih Raya</a></li>
                              </ul>
                          </li>
                          <li><a href="index.html#footer" class="smoothscroll">Contact</a></li>
@@ -273,7 +288,8 @@
                       <span>Details</span>
                     </a>
                     <a href="https://api.whatsapp.com/send?phone=60196086607&text=Hello%2C%20I%27m%20interested%20in%20Some%20item%20name%20here%20%28%24280.00%29" class="order-button">
-                      <span>Order this</span>
+                        <!-- <img src="images/icons/whatsapp-icon.png" alt="WhatsApp" class="whatsapp-icon"> Added image tag -->
+                        <span>Order this</span>
                     </a>
                   </div>
                 </div>
@@ -522,12 +538,12 @@
                     </ul>
                 </div>
 
-                <div class="column lg-6 tab-12 s-footer__bottom-right">
+                <!-- <div class="column lg-6 tab-12 s-footer__bottom-right">
                     <div class="ss-copyright">
-                        <span>© Copyright Mueller 2022</span> <!-- Update Copyright Year if needed -->
+                        <span>© Copyright Mueller 2022</span>
                         <span>Design by <a href="https://www.styleshout.com/">StyleShout</a></span>
                     </div>
-                </div>
+                </div> -->
 
             </div> <!-- s-footer__bottom -->
 
